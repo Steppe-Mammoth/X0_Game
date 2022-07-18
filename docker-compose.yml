@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+
+  bot:
+    container_name: XO_bot
+    restart: on-failure
+    stop_signal: SIGINT
+    build:
+      context: .
+    working_dir: "/home/ubuntu/docker/XO"
+    command: python3 -m app
+    depends_on:
+      - db
+    networks:
+      - botnet
+
+
+  db:
+    image: postgres:14-alpine
+    container_name: XO_database
+    stop_signal: SIGINT
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    restart: on-failure
+    volumes:
+      - '/home/ubuntu/database/xo_data:/var/lib/postgresql/data'
+    networks:
+      - botnet
+      - dbnet
+
+  pgadmin:
+    container_name: XO_pgadmin
+    image: dpage/pgadmin4
+    restart: on-failure
+    stop_signal: SIGINT
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASS}
+    ports:
+      - ${PGADMIN_PORT}
+    networks:
+      - dbnet
+    depends_on:
+      - db
+    logging:
+      driver: none
+
+
+
+networks:
+  botnet:
+    driver: bridge
+  dbnet:
+    driver: bridge
