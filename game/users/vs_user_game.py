@@ -116,7 +116,9 @@ class XOUsers:
 
         if free_cell is False:
             peace = True
+
         if get_winner is not None:
+            peace = False
             winner = get_winner
             winner.add_winner()
 
