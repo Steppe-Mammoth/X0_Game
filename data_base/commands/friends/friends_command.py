@@ -17,3 +17,10 @@ async def check_friends(session: AsyncSession, user_1: int, user_2: int):
     return await session.scalar(
         select(FriendsDB).where(or_(and_(FriendsDB.user1_id == user_1, FriendsDB.user2_id == user_2),
                                     and_(FriendsDB.user1_id == user_2, FriendsDB.user2_id == user_1))))
+
+
+async def add_friends(session: AsyncSession, my_user_id: int, friend_user_id: int):
+    friends = FriendsDB(user1_id=my_user_id, user2_id=friend_user_id)
+
+    session.add(friends)
+    await session.commit()

@@ -2,14 +2,7 @@ from aiogram.types import User
 from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from data_base.structure.models_db import UserDB, FriendsDB
-
-
-async def add_friends(session: AsyncSession, my_user_id: int, friend_user_id: int):
-    friends = FriendsDB(user1_id=my_user_id, user2_id=friend_user_id)
-
-    session.add(friends)
-    await session.commit()
+from data_base.structure.models_db import UserDB
 
 
 async def get_user(session: AsyncSession, user_id: int) -> UserDB | None:
