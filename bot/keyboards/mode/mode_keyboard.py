@@ -16,5 +16,3 @@ def get_game_mode_keyboard():
 
     keyboard.row(user_vs_bot, user_vs_user)
     return keyboard.as_markup()
-
-

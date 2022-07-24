@@ -4,7 +4,7 @@ from game.structure.fields.data.dataclasses import TInfo
 from game.structure.others.technical import XOTechnic
 from game.structure.fields.utils.technical import TableBase
 
-from app import logger
+from logger import logger
 
 
 class TableInfo:

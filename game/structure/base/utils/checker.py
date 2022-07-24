@@ -1,7 +1,7 @@
 from typing import Sequence, Optional
 
 from game.structure.players.data.dataclasses import PlayerInfo
-from app import logger
+from logger import logger
 
 
 class GameChecker:
@@ -38,5 +38,3 @@ class GameChecker:
             return winner
 
         logger.info(f'ВЫЧИСЛИТЬ ОСТАТОЧНУЮ ПОБЕДУ: PEACE: {peace} | WINNER: {winner}')
-
-

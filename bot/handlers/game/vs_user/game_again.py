@@ -7,11 +7,11 @@ from bot.keyboards.callbacks.vote_callback import RetryGame
 from bot.states.users.game_states import PlayerGame
 from bot.utils.user_utils.user_fsm import set_user_fsm
 from game.users.vs_user_game import XOUsers
-from app import logger
+from logger import logger
 
 
 @private_router.callback_query(RetryGame.filter(F.choice == False), state=PlayerGame.played)
-async def cancel_retry_game_again(call: types.CallbackQuery, callback_data: RetryGame, state: FSMContext):
+async def cancel_retry_game_again(call: types.CallbackQuery, callback_data: RetryGame, state: FSMContext, bot: Bot):
     data = await state.get_data()
     game: XOUsers = data.get('game_player')
 
@@ -24,7 +24,7 @@ async def cancel_retry_game_again(call: types.CallbackQuery, callback_data: Retr
     await game.unpin_all_messages()
 
     for player in players:
-        await set_user_fsm(user_id=player.id, chat_id=player.id, state=state, clear=True)
+        await set_user_fsm(user_id=player.id, chat_id=player.id, state=state, bot=bot, clear=True)
 
 
 @private_router.callback_query(RetryGame.filter(F.choice == True), state=PlayerGame.played)

@@ -9,7 +9,7 @@ from game.structure.base.game_info import GameInfo
 from game.structure.players.data.dataclasses import PlayerInfo
 from game.structure.message.messenger import Messenger
 from game.structure.players.utils.instance_create import bot_create_players_object
-from app import logger
+from logger import logger
 
 
 class XOBot:

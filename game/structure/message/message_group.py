@@ -5,7 +5,7 @@ from aiogram.types import InlineKeyboardButton
 from text.game_text.stats.table_info import get_table_info_text, get_now_player_step_text, get_first_player_step_text, \
     get_present_players
 from text.game_text.vote.retry_game import get_retry_game_vote_text, get_started_text_for_retry_game
-from text.game_text.winners.exit_game import get_table_exit_game_text, get_exit_game_text
+from text.game_text.winners.exit_game import get_game_table_capitulated_text, get_game_capitulated_text
 
 from text.game_text.winners.winners_party import get_winner_party_text
 from text.utils.emoji import GetEmoji
@@ -22,7 +22,7 @@ from bot.keyboards.vote.retry_vote_keyboard import retry_vote_game_keyboard, ret
 class MessageSender:
     @staticmethod
     async def notify_for_game_exit(bot: Bot, players: Sequence[PlayerInfo], player_exit: PlayerInfo):
-        text = get_exit_game_text(player_exit)
+        text = get_game_capitulated_text(player_exit)
         for player in players:
             await MessageTechnical.send_message(bot=bot, chat_id=player.id, text=text)
 
@@ -69,7 +69,7 @@ class MessageGameTable:
 
     @classmethod
     async def exit_game_table(cls, bot: Bot, players: Sequence[PlayerInfo], game_table: TInfo):
-        text = get_table_exit_game_text()
+        text = get_game_table_capitulated_text()
         await cls._update_game_table(bot=bot, text=text, players=players, game_table=game_table, finish=True)
 
 

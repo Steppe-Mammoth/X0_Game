@@ -8,9 +8,7 @@ class PlayerManger:
 
     @staticmethod
     def get_next_player(player_now: Optional[PlayerInfo], players_sequence: Sequence[PlayerInfo]) -> PlayerInfo:
-        """
-        * Возвращает следующего игрока.
-        Если player_now = None - возвращает первого игрока в списке"""
+        """Возвращает следующего игрока. Если player_now = None - возвращает первого игрока в списке"""
 
         p_now = player_now
         p1 = players_sequence[0]

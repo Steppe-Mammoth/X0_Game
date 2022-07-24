@@ -7,11 +7,11 @@ from bot.handlers.start import msg_back_to_start_menu
 from bot.keyboards.friends.friends_menu_keyboard import show_friends_keyboard
 from bot.states.users.menu_states import Menu
 
-from data_base.commands.users.users_command import get_user, add_friends
-from data_base.commands.friends.friends_command import check_friends
+from data_base.commands.users.users_command import get_user
+from data_base.commands.friends.friends_command import check_friends, add_friends
 
 from text.menu_text.friends.friends_menu import FriendsText
-from app import logger
+from logger import logger
 
 
 @private_router.callback_query(text='add_friend', state=Menu.navigate)

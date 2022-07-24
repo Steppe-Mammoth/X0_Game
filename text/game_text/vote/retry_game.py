@@ -13,7 +13,7 @@ def get_started_text_for_retry_game():
 
 
 def get_retry_game_vote_text(players: Sequence[PlayerInfo]) -> str:
-    text = f'<b><u>VOTE FOR PLAY AGAIN</u>:</b>\n'
+    text = '<b><u>VOTE FOR PLAY AGAIN</u>:</b>\n'
     for user in players:
         choice = user.msg_vote.choice
         choice_symbol = '👍' if choice is True else '👎' if choice is False else ''

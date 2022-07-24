@@ -28,4 +28,3 @@ class GameParameters:
 
     def edit_count_games(self, count: int):
         self.count_games = count
-
