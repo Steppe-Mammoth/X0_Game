@@ -3,7 +3,7 @@ from aiogram import types, Bot
 from asyncio import sleep
 from typing import Optional
 
-from app import logger
+from logger import logger
 from bot.utils.inviter.utils.invite_messenger import InviteMessenger
 
 from game.app import XO
@@ -58,8 +58,8 @@ class Inviter:
         # пригласительных
         # для получателя будет формироватся особый линк для реагирования к примеру на два одновременных запроса на игру
 
-        await set_user_fsm(user_id=p1.id, chat_id=p1.id, state=state, update_data={"inviter": self})
-        await set_user_fsm(user_id=p2.id, chat_id=p2.id, state=state, update_data={self.link: self})
+        await set_user_fsm(user_id=p1.id, chat_id=p1.id, state=state, bot=self._bot, update_data={"inviter": self})
+        await set_user_fsm(user_id=p2.id, chat_id=p2.id, state=state, bot=self._bot, update_data={self.link: self})
 
         logger.info('_set_fsm_invite_data - DONE'.upper())
 
@@ -83,14 +83,14 @@ class Inviter:
     async def _set_old_fsm(self, p1: types.User, p2: types.User, state):
         invite_link = self._get_invite_link()
 
-        p1_data = await get_user_data(p1.id, p1.id, state=state)
-        p2_data = await get_user_data(p2.id, p2.id, state=state)
+        p1_data = await get_user_data(p1.id, p1.id, state=state, bot=self._bot)
+        p2_data = await get_user_data(p2.id, p2.id, state=state, bot=self._bot)
 
         p1_data.pop('inviter')
         p2_data.pop(invite_link)
 
-        await set_user_fsm(user_id=p1.id, chat_id=p1.id, state=state, set_data=p1_data)
-        await set_user_fsm(user_id=p2.id, chat_id=p2.id, state=state, set_data=p2_data)
+        await set_user_fsm(user_id=p1.id, chat_id=p1.id, state=state, bot=self._bot, set_data=p1_data)
+        await set_user_fsm(user_id=p2.id, chat_id=p2.id, state=state, bot=self._bot, set_data=p2_data)
 
         logger.info('_set_old_fsm_invite_data - DONE'.upper())
 
@@ -111,7 +111,8 @@ class Inviter:
 
         for player in p1, p2:
             await set_user_fsm(user_id=player.id, chat_id=player.id,
-                               state=state, set_data={"game_player": game}, user_state=PlayerGame.played)
+                               state=state, bot=self._bot,
+                               set_data={"game_player": game}, user_state=PlayerGame.played)
 
         logger.info('set_game_fsm_state_data - DONE'.upper())
 

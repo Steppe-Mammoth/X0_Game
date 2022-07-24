@@ -13,14 +13,12 @@ from bot.keyboards.callbacks.setting_callback import SettingAccept
 from bot.keyboards.callbacks.user_callback import OpponentCB
 from bot.keyboards.setting.setting_keyboard import get_confirm_setting_keyboard
 
-from app import BotParam
-
 
 @private_router.callback_query(OpponentCB.filter(F.count_rounds != 0), state=Menu.navigate)
-async def confirm_setting(call: types.CallbackQuery, callback_data: OpponentCB):
+async def confirm_setting(call: types.CallbackQuery, callback_data: OpponentCB, bot: Bot):
     count_rounds = callback_data.count_rounds
     opponent_id = callback_data.user_id
-    opponent = (await BotParam.bot.get_chat_member(chat_id=opponent_id, user_id=opponent_id)).user
+    opponent = (await bot.get_chat_member(chat_id=opponent_id, user_id=opponent_id)).user
 
     text = MenuText.show_game_description(opponent.full_name, count_rounds=count_rounds)
     await call.message.edit_text(text=text, reply_markup=get_confirm_setting_keyboard(user_id=opponent.id,
@@ -32,7 +30,7 @@ async def confirm_game_setting(call: types.CallbackQuery, callback_data: Setting
     # Потвердить выбраные парметры и отправить приглашение
     user_1 = call.from_user
     user_2_id = callback_data.opponent_id
-    user_2 = (await BotParam.bot.get_chat_member(user_2_id, user_2_id)).user
+    user_2 = (await bot.get_chat_member(user_2_id, user_2_id)).user
 
     pre_inviter: Inviter = (await state.get_data()).get('inviter')
 
@@ -42,7 +40,7 @@ async def confirm_game_setting(call: types.CallbackQuery, callback_data: Setting
         await call.answer(text=text, show_alert=True)
         return
 
-    if await check_access_for_invite(user_id=user_2.id, state=state) is False:
+    if await check_access_for_invite(user_id=user_2.id, state=state, bot=bot) is False:
         await call.answer('WAIT\nTHIS PLAYER NOW PLAYING GAME!', show_alert=True)
         return
 

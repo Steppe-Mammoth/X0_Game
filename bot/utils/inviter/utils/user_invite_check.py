@@ -2,9 +2,9 @@ import datetime
 from bot.utils.user_utils.user_fsm import get_user_state
 
 
-async def check_access_for_invite(user_id, state):
+async def check_access_for_invite(user_id, state, bot):
     """Проверяет не находится ли юзер в игровых состояниях"""
-    state_user = await get_user_state(user_id=user_id, chat_id=user_id, state=state)
+    state_user = await get_user_state(user_id=user_id, chat_id=user_id, state=state, bot=bot)
 
     if state_user in ('PlayerGame:played', 'PlayerGame:vote'):
         return False

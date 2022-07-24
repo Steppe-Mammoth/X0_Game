@@ -6,7 +6,7 @@ from aiogram.dispatcher.fsm.context import FSMContext
 from bot.handlers.routers import private_router
 from bot.states.users.game_states import PlayerGame
 from game.users.vs_user_game import XOUsers
-from app import logger
+from logger import logger
 
 
 @private_router.message_handler(state=PlayerGame.played)

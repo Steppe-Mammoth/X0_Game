@@ -21,7 +21,7 @@ class BotAI:
 
         for row in self.win_combinations:
             row_table = [table[index] for index in row]
-            # Западло игроку с 2мя клетками и одной пустой в комбинации
+            # помешать игроку с 2/3 набранных клеток в комбинации
 
             if row_table.count(self.p1_symbols) == 2 and row_table.count(None) == 1:
                 for index in row:

@@ -1,4 +1,4 @@
-from aiogram import types
+from aiogram import types, Bot
 from aiogram.dispatcher.fsm.context import FSMContext
 
 from bot.handlers.routers import private_router
@@ -9,7 +9,7 @@ from bot.utils.user_utils.user_fsm import set_user_fsm
 
 
 @private_router.message_handler(commands='exit', state=PlayerGame.played)
-async def exit_game(message: types.Message, state: FSMContext):
+async def exit_game(message: types.Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
     game: XOUsers = data.get('game_player')
 
@@ -19,4 +19,4 @@ async def exit_game(message: types.Message, state: FSMContext):
     await game.exit_game(exit_player=player)
 
     for player in players:
-        await set_user_fsm(user_id=player.id, chat_id=player.id, state=state, clear=True)
+        await set_user_fsm(user_id=player.id, chat_id=player.id, state=state, bot=bot, clear=True)

@@ -1,5 +1,4 @@
 import asyncio
-import logging
 
 from aiogram import Bot, Dispatcher, F
 from aiogram.dispatcher.fsm.storage.memory import MemoryStorage
@@ -7,32 +6,25 @@ from aiogram.dispatcher.fsm.storage.memory import MemoryStorage
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-from bot.data import config
+from logger import logger
+
+from bot.data.config import Config
 from bot.handlers.routers import private_router, private_db_router
 from bot.middlewares.db import DbSessionMiddleware
 from bot.utils.bot_utils.set_bot_commands import set_default_commands
-
-logging.basicConfig(level=logging.INFO,
-                    format=format('T: %(asctime)s | LVL: %(levelname)s | Func: %(funcName)s | L: '
-                                  f'%(lineno)s | | MSG: %(message)s - %(name)s||\n{("-" * 150)}'),
-                    datefmt='%H:%M:%S')
-
-logger = logging.getLogger()
 
 
 class BotParam:
     storage = MemoryStorage()
     dp = Dispatcher(storage=storage)
-    bot = Bot(token=config.BOT_TOKEN, parse_mode="HTML")
+    bot = Bot(token=Config.bot_token, parse_mode="HTML")
 
 
 async def main():
     dp = BotParam.dp
     bot = BotParam.bot
 
-    _engine = create_async_engine(
-        f"postgresql+asyncpg://{config.DB_USER}:{config.DB_PASS}@{config.IP}/{config.DB_NAME}",
-        future=True)
+    _engine = create_async_engine(Config.postgres_dsn, future=True)
     _async_session = sessionmaker(bind=_engine, expire_on_commit=False, class_=AsyncSession)
 
     private_db_router.message.middleware(DbSessionMiddleware(_async_session))
@@ -47,9 +39,12 @@ async def main():
     await set_default_commands(bot)
 
     try:
+        logger.warning('Bot started')
         await dp.start_polling(bot)
+
     finally:
         await bot.session.close()
+        logger.warning('Bot close')
 
 
 if __name__ == "__main__":

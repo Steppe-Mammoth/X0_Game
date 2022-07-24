@@ -7,7 +7,7 @@ from game.structure.base.utils.instance_creator import BaseCreator
 from game.structure.message.messenger import Messenger
 from game.structure.players.data.dataclasses import PlayerInfo
 
-from app import logger
+from logger import logger
 
 
 class XOUsers:

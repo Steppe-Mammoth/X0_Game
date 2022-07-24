@@ -2,7 +2,7 @@ from typing import Optional, MutableSequence, Tuple
 
 from game.structure.players.data.dataclasses import PlayerInfo
 from game.structure.players.utils.controls import PlayerManger
-from app import logger
+from logger import logger
 
 
 class Players:
@@ -41,7 +41,7 @@ class Players:
         self._sequence.reverse()
         self.reset_now_player()
 
-        logger.info(f'REVERSE AND RESET - DONE')
+        logger.info('REVERSE AND RESET - DONE')
 
     def _players_sequence_initialization(self):
         """

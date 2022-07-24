@@ -13,4 +13,3 @@ def get_confirm_invite_keyboard(invite_link: str):
 
     keyboard.row(accept, cancel)
     return keyboard.as_markup()
-

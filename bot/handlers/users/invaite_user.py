@@ -1,4 +1,4 @@
-from aiogram import types, F
+from aiogram import types, F, Bot
 from aiogram.dispatcher.fsm.context import FSMContext
 
 from bot.handlers.routers import private_router
@@ -13,12 +13,12 @@ from bot.utils.inviter.utils.user_invite_check import check_access_for_invite
 
 
 @private_router.callback_query(Invite.filter(F.choice == True), state=(Menu.navigate, BotGame.played, None))
-async def accept_invitation(call: types.CallbackQuery, callback_data: Invite, state: FSMContext):
+async def accept_invitation(call: types.CallbackQuery, callback_data: Invite, state: FSMContext, bot: Bot):
     # приянть приглашение
     invite_link = callback_data.invite_link
     invite: Inviter = (await state.get_data()).get(invite_link)
 
-    if await check_access_for_invite(user_id=invite.parameters.user_1.id, state=state) is False:
+    if await check_access_for_invite(user_id=invite.parameters.user_1.id, state=state, bot=bot) is False:
         await call.answer('WAIT\nTHIS PLAYER NOW PLAYING GAME', show_alert=True)
         return
 

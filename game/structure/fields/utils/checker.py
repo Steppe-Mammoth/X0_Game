@@ -2,7 +2,7 @@ from typing import Sequence
 
 from game.structure.fields.utils.technical import TableBase
 from game.structure.players.data.dataclasses import PlayerInfo
-from app import logger
+from logger import logger
 
 
 class TableChecker:
@@ -14,7 +14,7 @@ class TableChecker:
 
         if count_steps / 2 == 5:
             if all(game_table):
-                logger.info(f'ПРОВЕРКА КЛЕТОК: ВСЕ КЛЕТКИ ЗАНЯТЫ')
+                logger.info('ПРОВЕРКА КЛЕТОК: ВСЕ КЛЕТКИ ЗАНЯТЫ')
                 return False
         else:
             return True

@@ -11,4 +11,3 @@ class MessageInfo:
 @dataclass
 class MessageVoteInfo(MessageInfo):
     choice: Optional[bool] = None
-

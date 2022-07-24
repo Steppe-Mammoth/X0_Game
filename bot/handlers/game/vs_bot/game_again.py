@@ -5,11 +5,11 @@ from aiogram import Bot
 from bot.handlers.routers import private_router
 from bot.states.users.game_states import BotGame
 from game.android.vs_bot_game import XOBot
-from app import logger
+from logger import logger
 
 
 @private_router.callback_query(text='retry_game_bot', state=BotGame.played)
-async def vote_retry_game_again(call: CallbackQuery, state: FSMContext, bot: Bot):
+async def bot_game_again(call: CallbackQuery, state: FSMContext, bot: Bot):
     await call.message.delete_reply_markup()
 
     data = await state.get_data()
@@ -20,7 +20,7 @@ async def vote_retry_game_again(call: CallbackQuery, state: FSMContext, bot: Bot
 
 
 @private_router.callback_query(text='exit_in_menu', state=BotGame.played)
-async def vote_retry_game_again(call: CallbackQuery, state: FSMContext):
+async def bot_exit_game(call: CallbackQuery, state: FSMContext):
     await call.message.delete()
     await state.clear()
 

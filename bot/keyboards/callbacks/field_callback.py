@@ -11,5 +11,3 @@ class Cell(CallbackData, prefix="cell"):
     """Param finish - charge of the end of the game_text"""
     unique_id: str | None
     """Unique id to avoid clicks from another game_text fields"""
-
-

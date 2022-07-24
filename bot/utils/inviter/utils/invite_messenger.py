@@ -1,9 +1,8 @@
 import datetime
 from typing import Optional
-
 from aiogram import Bot, types
 
-from app import logger, BotParam
+from logger import logger
 from bot.keyboards.invite.invaite_keyboard import get_confirm_invite_keyboard
 from text.menu_text.invited.invited_menu import InviteText
 
@@ -42,7 +41,7 @@ class InviteMessenger:
         msg = self.msg_wait_accept_invite
 
         try:
-            await BotParam.bot.delete_message(chat_id=msg.chat.id, message_id=msg.message_id)
+            await self._bot.delete_message(chat_id=msg.chat.id, message_id=msg.message_id)
         except Exception as e:
             logger.warning(e)
 
