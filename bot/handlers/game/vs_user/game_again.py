@@ -3,7 +3,7 @@ from aiogram import types, F, Bot
 from aiogram.dispatcher.fsm.context import FSMContext
 
 from bot.handlers.routers import private_router
-from bot.keyboards.callbacks.vote_callback import RetryGame
+from bot.callbacks.vote_callback import RetryGame
 from bot.states.users.game_states import PlayerGame
 from bot.utils.user_utils.user_fsm import set_user_fsm
 from game.users.vs_user_game import XOUsers

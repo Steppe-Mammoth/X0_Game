@@ -9,9 +9,9 @@ from text.menu_text.invited.invited_menu import InviteText
 from text.menu_text.started_menu.menu_text import MenuText
 from bot.handlers.routers import private_router
 
-from bot.keyboards.callbacks.setting_callback import SettingAccept
-from bot.keyboards.callbacks.user_callback import OpponentCB
-from bot.keyboards.setting.setting_keyboard import get_confirm_setting_keyboard
+from bot.callbacks.setting_callback import SettingAccept
+from bot.callbacks.user_callback import OpponentCB
+from bot.keyboards.menu.confirm_setting_keyboard import get_confirm_setting_keyboard
 
 
 @private_router.callback_query(OpponentCB.filter(F.count_rounds != 0), state=Menu.navigate)
@@ -34,7 +34,7 @@ async def confirm_game_setting(call: types.CallbackQuery, callback_data: Setting
 
     pre_inviter: Inviter = (await state.get_data()).get('inviter')
 
-    if pre_inviter is not None:
+    if pre_inviter and pre_inviter.access is None:
         seconds = pre_inviter.get_remaining_active_time()
         text = InviteText.watch_wait_time(seconds)
         await call.answer(text=text, show_alert=True)

@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.keyboards.callbacks.vote_callback import RetryGame
+from bot.callbacks.vote_callback import RetryGame
 
 
 def retry_vote_game_keyboard(confirm_count: int = 0):

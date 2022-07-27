@@ -20,6 +20,8 @@ class GetEmoji:
 
     _robot = '📼', '⌚', '💻', '🖨', '🕹', '🗜', '💾', '📼', '📟', '☎', '📺', '📻', '⏰', '⏲', '🤖', '📽', '📠'
 
+    _guns = '⛏', '🪚', '🗡', '🔪', '🪓', '💣', '🧨', '🔨', '🪛'
+
     _envelope = '📪', '📫', '📬', '📭', '📧', '✉', '📨', '📮'
 
     _symbols_chat = '🔺', '🔻', '🔸', '🔹', '▫️'
@@ -62,6 +64,10 @@ class GetEmoji:
     @classmethod
     def robot(cls, count):
         return cls._r_choices(emojis=cls._robot, count=count)
+
+    @classmethod
+    def guns(cls, count):
+        return cls._r_choices(emojis=cls._guns, count=count)
 
     @classmethod
     def symbols_chat_generator(cls):

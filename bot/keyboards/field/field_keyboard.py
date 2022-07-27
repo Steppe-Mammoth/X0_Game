@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.keyboards.callbacks.field_callback import Cell
+from bot.callbacks.field_callback import Cell
 
 
 def game_field_keyboard(table: list, unique_id: str = None, finish: bool = False):

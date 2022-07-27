@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.keyboards.callbacks.invite_callback import Invite
+from bot.callbacks.invite_callback import Invite
 
 
 def get_confirm_invite_keyboard(invite_link: str):

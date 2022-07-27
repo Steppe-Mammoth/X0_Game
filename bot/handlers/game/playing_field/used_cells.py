@@ -1,7 +1,7 @@
 from aiogram import F, types
 
 from bot.handlers.routers import private_router
-from bot.keyboards.callbacks.field_callback import Cell
+from bot.callbacks.field_callback import Cell
 
 
 @private_router.callback_query(Cell.filter(F.finish == True), state='*')

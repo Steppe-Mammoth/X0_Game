@@ -2,7 +2,7 @@ from aiogram import types, F
 from aiogram.dispatcher.fsm.context import FSMContext
 
 from bot.handlers.routers import private_router
-from bot.keyboards.callbacks.field_callback import Cell
+from bot.callbacks.field_callback import Cell
 from bot.states.users.game_states import BotGame
 from game.android.vs_bot_game import XOBot
 

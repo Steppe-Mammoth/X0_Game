@@ -1,15 +1,11 @@
 from typing import Sequence
 
 from game.structure.players.data.dataclasses import PlayerInfo
-from text.utils.lines import get_symbols_line_text
 
 
 def get_started_text_for_retry_game():
-    line = get_symbols_line_text()
-    text = '<b>CHOICE:</b> <i><u>RETRY</u> OR <u>EXIT</u> GAME</i>'.upper()
-
-    end_text = line + '\n' + text
-    return end_text
+    text = '<b>CHOICE:</b> 🌝 <i><u>RETRY</u> OR <u>EXIT</u> 🌚 GAME</i>'.upper()
+    return text
 
 
 def get_retry_game_vote_text(players: Sequence[PlayerInfo]) -> str:

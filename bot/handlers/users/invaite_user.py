@@ -3,7 +3,7 @@ from aiogram.dispatcher.fsm.context import FSMContext
 
 from bot.handlers.routers import private_router
 
-from bot.keyboards.callbacks.invite_callback import Invite
+from bot.callbacks.invite_callback import Invite
 from bot.states.users.game_states import BotGame
 
 from bot.states.users.menu_states import Menu
