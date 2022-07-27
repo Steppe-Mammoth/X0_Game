@@ -25,7 +25,7 @@ class WinnerText:
         p2 = players[1]
 
         text = f'''
-🕊 🕊 <b>ABSOLUTE PEACE</b> 🕊 🕊
+🏆 🕊 🕊 <b>ABSOLUTE PEACE</b> 🕊 🕊 🏆
 | Losers:
  -  <b>{p1.name.split()[0].upper()}</b>: <b>{p1.count_winner}</b> wins
  -  <b>{p2.name.split()[0].upper()}</b>: <b>{p2.count_winner}</b> wins'''
@@ -36,15 +36,16 @@ class WinnerText:
         winner = win_info.winner
         loser = win_info.loser
 
-        text = f'''
-Winner: * <b>{winner.name.split()[0].upper()}</b> | <b>{winner.count_winner}</b> wins
-Loser:  * <b>{loser.name.split()[0].upper()}</b> | <b>{loser.count_winner}</b> wins'''
+        text = f'''<i>
+🥇 Winner: 🍾✨✨💫
+    🏆 <b>{winner.name.split()[0].upper()}</b> | <b>{winner.count_winner}</b> wins 🏆
+🥈 Loser:  <b>{loser.name.split()[0].upper()}</b> | <b>{loser.count_winner}</b> wins 🪦</i>'''
         return text
 
     @staticmethod
     def _get_game_info_text(game_stats: GameStats) -> str:
         text = f'''
 Game info: 
-    <tg-spoiler>* Peace🕊 : <b>{game_stats.count_peace}</b>
-    * Playing games: <b>{game_stats.count_games_played}</b> / <b>{game_stats.count_selected_games}</b></tg-spoiler>'''
+    <tg-spoiler>🕊 * Peace : <b>{game_stats.count_peace}</b> 🕊
+    ⚔️ * Playing games: <b>{game_stats.count_games_played}</b> / <b>{game_stats.count_selected_games}</b></tg-spoiler>'''
         return text

@@ -8,10 +8,10 @@ from data_base.commands.friends.friends_utils import _get_friends_id, _get_frien
 from data_base.structure.models_db import FriendsDB
 
 
-async def add_friends(session: AsyncSession, my_user_id: int, friend_user_id: int):
+async def add_friends(session: AsyncSession, user1_id: int, user2_id: int):
     friends = FriendsDB()
-    friends.user1_id = my_user_id
-    friends.user2_id = friend_user_id
+    friends.user1_id = user1_id
+    friends.user2_id = user2_id
     friends.created_on = datetime.utcnow()
 
     session.add(friends)
@@ -24,7 +24,7 @@ async def get_friends(session: AsyncSession, user_id: int):
     return friends_objects
 
 
-async def check_friends(session: AsyncSession, user_1: int, user_2: int):
+async def check_friends(session: AsyncSession, user1_id: int, user2_id: int):
     return await session.scalar(
-        select(FriendsDB).where(or_(and_(FriendsDB.user1_id == user_1, FriendsDB.user2_id == user_2),
-                                    and_(FriendsDB.user1_id == user_2, FriendsDB.user2_id == user_1))))
+        select(FriendsDB).where(or_(and_(FriendsDB.user1_id == user1_id, FriendsDB.user2_id == user2_id),
+                                    and_(FriendsDB.user1_id == user2_id, FriendsDB.user2_id == user1_id))))

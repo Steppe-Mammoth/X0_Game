@@ -21,7 +21,7 @@ async def bot_game_again(call: CallbackQuery, state: FSMContext, bot: Bot):
 
 @private_router.callback_query(text='exit_in_menu', state=BotGame.played)
 async def bot_exit_game(call: CallbackQuery, state: FSMContext):
-    await call.message.delete()
     await state.clear()
+    await call.message.delete_reply_markup()
 
     logger.info('EXIT TO MENU')

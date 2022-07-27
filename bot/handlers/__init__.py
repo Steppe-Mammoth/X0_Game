@@ -1,4 +1,3 @@
-from . import users
-from . import game
-
 from . import start
+from . import game
+from . import users

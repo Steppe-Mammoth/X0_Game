@@ -16,14 +16,15 @@ from bot.utils.user_utils.user_fsm import set_user_fsm, get_user_data
 
 class Inviter:
     _wait_time = 45
-    """Время которое дается на принятие приглашение"""
+    """Время для на принятие приглашения"""
 
     def __init__(self, bot: Bot, user_1: types.User, user_2: types.User, count_rounds: int):
         self._bot = bot
         self.messenger: InviteMessenger = InviteMessenger(bot=bot)
         self.parameters: GameParameters = GameParameters(user_1=user_1, user_2=user_2, count_games=count_rounds)
         self.link: str = self._get_invite_link()
-        self._access: Optional[bool] = None
+
+        self.access: Optional[bool] = None
 
     async def send_invite(self, state):
         p1 = self.parameters.user_1
@@ -36,13 +37,14 @@ class Inviter:
 
         await sleep(self._wait_time)
 
-        if self._access is None:
-            logger.info('auto timer func - start'.upper())
+        if self.access is None:
+
+            self.access = False
             await self.messenger.auto_cancel_invite()
             await self.messenger.notify_me_time_out(p1=p1, p2=p2)
             await self._set_old_fsm(p1=p1, p2=p2, state=state)
 
-            logger.info('auto timer func - done'.upper())
+            logger.info('auto timer del invite - done'.upper())
 
     def get_remaining_active_time(self) -> int:
         # показывает оставившейся время ожидания ответа на приглашения
@@ -81,15 +83,15 @@ class Inviter:
         logger.info('**press_accept_invite - DONE'.upper())
 
     async def _set_old_fsm(self, p1: types.User, p2: types.User, state):
+        """Удаляет для каждого пользователя его пригласительные ссылки"""
         invite_link = self._get_invite_link()
 
         p1_data = await get_user_data(p1.id, p1.id, state=state, bot=self._bot)
-        p2_data = await get_user_data(p2.id, p2.id, state=state, bot=self._bot)
-
         p1_data.pop('inviter')
-        p2_data.pop(invite_link)
-
         await set_user_fsm(user_id=p1.id, chat_id=p1.id, state=state, bot=self._bot, set_data=p1_data)
+
+        p2_data = await get_user_data(p2.id, p2.id, state=state, bot=self._bot)
+        p2_data.pop(invite_link)
         await set_user_fsm(user_id=p2.id, chat_id=p2.id, state=state, bot=self._bot, set_data=p2_data)
 
         logger.info('_set_old_fsm_invite_data - DONE'.upper())
@@ -117,7 +119,7 @@ class Inviter:
         logger.info('set_game_fsm_state_data - DONE'.upper())
 
     def _set_access(self, choice: bool):
-        self._access = choice
+        self.access = choice
 
     def _get_invite_link(self):
         return f"{self.parameters.user_1.id}_{self.parameters.user_2.id}"

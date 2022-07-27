@@ -2,65 +2,58 @@ from aiogram import types, Bot
 from aiogram.dispatcher.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from bot.callbacks.messages_callback import MessageExpand
 from bot.handlers.routers import private_router, private_db_router
-from bot.handlers.start import msg_back_to_start_menu
-from bot.keyboards.friends.friends_menu_keyboard import show_friends_keyboard
-from bot.states.users.menu_states import Menu
 
-from data_base.commands.users.users_command import get_user
-from data_base.commands.friends.friends_command import check_friends, add_friends
+from bot.keyboards.menu.select_friends_keyboard import short_full_about_button
+from bot.states.users.menu_states import Menu
+from bot.utils.bot_utils.safe_message import safe_del_message
+from bot.utils.menu_utils.add_friends import add_users_to_friends
 
 from text.menu_text.friends.friends_menu import FriendsText
-from logger import logger
+
+
+@private_router.callback_query(MessageExpand.filter(), state=(Menu.navigate, Menu.send_contact))
+async def expand_message(call: types.CallbackQuery, callback_data: MessageExpand, state: FSMContext, bot: Bot):
+    await about_add_friend(call=call, state=state, bot=bot, callback_data=callback_data)
 
 
 @private_router.callback_query(text='add_friend', state=Menu.navigate)
-async def start_add_friend(call: types.CallbackQuery, state: FSMContext):
+async def about_add_friend(call: types.CallbackQuery, state: FSMContext, bot: Bot, callback_data: MessageExpand = None):
+    bot_obj = await bot.get_me()
+    text_expand = FriendsText.add_friends(my_id=call.from_user.id, bot_username=bot_obj.username)
+
+    if callback_data:
+        text = text_expand.full if callback_data.expand_msg is True else text_expand.short
+        choice_expand = False if callback_data.expand_msg is True else True
+    else:
+        text = text_expand.short
+        choice_expand = True
+
     await state.set_state(Menu.send_contact)
-
-    text = FriendsText.add_friends()
-    msg = await call.message.edit_text(text=text)
-
-    await state.update_data(add_friends=(msg.chat.id, msg.message_id))
-
-
-@private_router.message_handler(commands='cancel', state=Menu.send_contact)
-async def cancel_added_friend(message: types.Message, state: FSMContext):
-    await msg_back_to_start_menu(message=message, state=state)
+    msg = await call.message.edit_text(text=text, reply_markup=short_full_about_button(expand_message=choice_expand))
+    await state.update_data(msg_menu=(msg.chat.id, msg.message_id))
 
 
 @private_db_router.message_handler(content_types=["contact", "text"], state=Menu.send_contact)
-async def add_friend_contact_user(message: types.Message, state: FSMContext, bot: Bot, session: AsyncSession):
-    msg = (await state.get_data()).get('add_friends')
-    user_id = message.from_user.id
+async def pre_add_users_to_friends(message: types.Message, state: FSMContext, bot: Bot, session: AsyncSession):
 
     if message.contact:
         added_user_id = message.contact.user_id
     elif message.forward_from:
         added_user_id = message.forward_from.id
     else:
-        text = FriendsText.get_error_format_msg()
-        await message.answer(text=text)
+        data = await state.get_data()
+        msg = data.get("msg_menu")
+        error_text = FriendsText.get_error_format_msg()
+
+        if msg:
+            await safe_del_message(chat_id=msg[0], message_id=msg[1], bot=bot, del_keyboard=True)
+
+        msg = await message.answer(text=error_text, reply_markup=short_full_about_button(expand_message=True))
+        await state.update_data(msg_menu=(msg.chat.id, msg.message_id))
         return
 
-    check_friend = await check_friends(session, user_1=user_id, user_2=added_user_id)
-    if check_friend is not None:  # Проверить есть ли юзер в списке друзей
-        text = "THIS USER IS ALREADY ON THE FRIENDS LIST"
+    await add_users_to_friends(friend_id=added_user_id, message=message, state=state, bot=bot, session=session)
 
-    else:
-        added_user = await get_user(session, user_id=added_user_id)
-        if added_user:
-            name_friend: str = added_user.full_name
-            text = FriendsText.added_friend(name_friend)
 
-            await add_friends(session, my_user_id=message.from_user.id, friend_user_id=added_user.user_id)
-        else:
-            text = FriendsText.fail_add_friend()
-
-    try:
-        await bot.delete_message(chat_id=msg[0], message_id=msg[1])
-    except Exception as e:
-        logger.warning(e)
-
-    await state.set_state(Menu.navigate)
-    await message.answer(text=text, reply_markup=await show_friends_keyboard(session, user_id=message.from_user.id))

@@ -12,15 +12,21 @@ def get_table_info_text(players: Sequence[PlayerInfo], count_selected_games: int
     p2_name = p2.name.split()[0]
 
     people = GetEmoji.people(2)
+    guns = GetEmoji.guns(2)
 
-    text = f'''⠀<i><b>{people[0]} {p1_name.upper()}</b> vs <b>{p2_name.upper()} {people[1]}</b></i>
+    if p1.count_winner == p2.count_winner:
+        p1_prize = p2_prize = '🥉'
+    else:
+        p1_prize = '🥇' if p1.count_winner > p2.count_winner else '🥈'
+        p2_prize = '🥇' if p2.count_winner > p1.count_winner else '🥈'
 
+    text = f'''⠀<i><b>{people[0]} {p1_name.upper()}</b> {guns[0]} vs {guns[1]} <b>{p2_name.upper()} {people[1]}</b></i>
     <u>{'*' * 30}</u>
-    <i><b>VICTORY COUNTER:</b>
-    {p1.name}: {p1.count_winner} / {count_selected_games}
-    {p2.name}: {p2.count_winner} / {count_selected_games}</i>
+    <i><b>VICTORY COUNTER:</b> 🏆 | 🪦
+    - {p1.name}: {p1.count_winner} / {count_selected_games} {p1_prize}
+    - {p2.name}: {p2.count_winner} / {count_selected_games} {p2_prize}</i>
     <u>{'*' * 30}</u>
-    <b>GAMES PLAYED: {count_games_played}</b>
+    ⚔️ <b>GAMES PLAYED: {count_games_played}</b>
     '''
     return text
 

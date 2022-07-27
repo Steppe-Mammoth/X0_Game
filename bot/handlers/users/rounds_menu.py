@@ -1,8 +1,8 @@
 from aiogram import F, types
 
 from bot.handlers.routers import private_router
-from bot.keyboards.callbacks.user_callback import OpponentCB
-from bot.keyboards.setting.setting_keyboard import get_count_rounds_keyboard
+from bot.callbacks.user_callback import OpponentCB
+from bot.keyboards.menu.select_rounds_keyboard import get_count_rounds_keyboard
 from bot.states.users.menu_states import Menu
 from text.menu_text.started_menu.menu_text import MenuText
 
